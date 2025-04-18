@@ -33,7 +33,6 @@ use {
 pub const MIN_CHUNK_SIZE: i32 = 4 * 1024;
 pub const MAX_CHUNK_SIZE: i32 = 512 * 1024;
 const FILE_MIGRATE_ERROR: i32 = 303;
-const BIG_FILE_SIZE: usize = 10 * 1024 * 1024;
 
 pub struct DownloadIter {
     client: Client,
@@ -212,7 +211,7 @@ impl Client {
             .to_raw_input_location()
             .zip(downloadable.size())
         {
-            if size > BIG_FILE_SIZE {
+            if size > APP_CONFIG.big_file_size {
                 return self
                     .download_media_concurrent(location, size, path, APP_CONFIG.upload_worker_count)
                     .await;

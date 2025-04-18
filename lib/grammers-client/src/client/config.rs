@@ -6,6 +6,7 @@ use serde::Deserialize;
 #[derive(Debug, Deserialize, Clone)]
 pub struct ClientConfig {
     pub upload_worker_count: usize,
+    pub big_file_size: usize,
 }
 
 pub static APP_CONFIG: LazyLock<ClientConfig> = LazyLock::new(load);
