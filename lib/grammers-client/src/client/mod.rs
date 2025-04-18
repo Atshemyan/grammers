@@ -10,6 +10,7 @@ pub mod bots;
 pub mod chats;
 #[allow(clippy::module_inception)]
 pub mod client;
+pub mod config;
 pub mod dialogs;
 pub mod files;
 pub mod messages;

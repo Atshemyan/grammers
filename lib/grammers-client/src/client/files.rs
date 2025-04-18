@@ -6,6 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use super::config::APP_CONFIG;
 use crate::Client;
 use crate::types::{Downloadable, Uploaded};
 use crate::utils::generate_random_id;
@@ -33,7 +34,6 @@ pub const MIN_CHUNK_SIZE: i32 = 4 * 1024;
 pub const MAX_CHUNK_SIZE: i32 = 512 * 1024;
 const FILE_MIGRATE_ERROR: i32 = 303;
 const BIG_FILE_SIZE: usize = 10 * 1024 * 1024;
-const WORKER_COUNT: usize = 4;
 
 pub struct DownloadIter {
     client: Client,
@@ -207,13 +207,14 @@ impl Client {
         path: P,
     ) -> Result<(), io::Error> {
         // Concurrent downloader
+
         if let Some((location, size)) = downloadable
             .to_raw_input_location()
             .zip(downloadable.size())
         {
             if size > BIG_FILE_SIZE {
                 return self
-                    .download_media_concurrent(location, size, path, WORKER_COUNT)
+                    .download_media_concurrent(location, size, path, APP_CONFIG.upload_worker_count)
                     .await;
             }
         }
@@ -391,7 +392,7 @@ impl Client {
         if big_file {
             let parts = Arc::new(parts);
             let mut tasks = FuturesUnordered::new();
-            for _ in 0..WORKER_COUNT {
+            for _ in 0..APP_CONFIG.upload_worker_count {
                 let handle = self.clone();
                 let parts = Arc::clone(&parts);
                 let task = async move {

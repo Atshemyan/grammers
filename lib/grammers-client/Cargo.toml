@@ -24,6 +24,8 @@ default = ["fs"]
 
 [dependencies]
 chrono = "0.4.38"
+config = "0.15.11"
+dirs = "6.0.0"
 futures-util = { version = "0.3.30", default-features = false, features = [
     "alloc"
 ] }
@@ -42,6 +44,8 @@ mime_guess = "2.0.5"
 os_info = { version = "3.8.2", default-features = false }
 pin-project-lite = "0.2"
 pulldown-cmark = { version = "0.12.1", default-features = false, optional = true }
+serde = "1.0.219"
+serde_derive = "1.0.219"
 tokio = { version = "1.40.0", default-features = false, features = [
     "rt",
 ] }
