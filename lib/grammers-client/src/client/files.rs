@@ -384,7 +384,7 @@ impl Client {
             name
         };
 
-        let big_file = size > BIG_FILE_SIZE;
+        let big_file = size > APP_CONFIG.big_file_size;
         let parts = PartStream::new(stream, size);
         let total_parts = parts.total_parts();
 
