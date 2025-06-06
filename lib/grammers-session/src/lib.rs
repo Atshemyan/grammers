@@ -18,7 +18,7 @@ pub use generated::types::UpdateState;
 pub use generated::types::User;
 use generated::{enums, types};
 use grammers_tl_types::deserialize::Error as DeserializeError;
-pub use message_box::{Gap, MessageBox};
+pub use message_box::{Gap, MessageBox, MessageBoxes, State};
 pub use message_box::{PrematureEndReason, channel_id};
 use std::fmt;
 use std::fs::{File, OpenOptions};
@@ -107,12 +107,13 @@ impl Session {
             .next()
     }
 
-    fn insert_dc(&self, dc: enums::DataCenter) {
+    fn insert_dc(&self, new_dc: enums::DataCenter) {
         let mut session = self.session.lock().unwrap();
-        if let Some(pos) = session.dcs.iter().position(|dc| dc.id() == dc.id()) {
+
+        if let Some(pos) = session.dcs.iter().position(|dc| dc.id() == new_dc.id()) {
             session.dcs.remove(pos);
         }
-        session.dcs.push(dc);
+        session.dcs.push(new_dc);
     }
 
     pub fn insert_dc_tcp(&self, id: i32, addr: &SocketAddr, auth: [u8; 256]) {
